@@ -57,7 +57,6 @@ impl Gap {
     }
 }
 
-/* TODO: min(), max(), minmax() */
 #[derive(Debug, Copy, Clone)]
 pub enum SizePolicy {
     Auto,
@@ -65,6 +64,9 @@ pub enum SizePolicy {
     Fr(u32),
     Pc(u32),
     Px(u32),
+    min(Scalar),
+    max(Scalar),
+    minmax(Scalar, Scalar),
 }
 
 impl Default for SizePolicy {

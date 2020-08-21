@@ -2,28 +2,28 @@ use super::common::{Scalar, SideMeasures, Color};
 
 #[derive(Debug, Default, Copy, Clone)]
 pub struct CornerMeasures {
-    upperLeft: Scalar,
-    upperRight: Scalar,
-    lowerRight: Scalar,
-    lowerLeft: Scalar,
+    upper_left: Scalar,
+    upper_right: Scalar,
+    lower_right: Scalar,
+    lower_left: Scalar,
 }
 
 impl CornerMeasures {
     pub fn new(size: Scalar) -> CornerMeasures {
         CornerMeasures {
-            upperLeft: size,
-            upperRight: size,
-            lowerRight: size,
-            lowerLeft: size,
+            upper_left: size,
+            upper_right: size,
+            lower_right: size,
+            lower_left: size,
         }
     }
 
-    pub fn make(upperLeft: Scalar, upperRight: Scalar, lowerRight: Scalar, lowerLeft: Scalar) -> CornerMeasures {
+    pub fn make(upper_left: Scalar, upper_right: Scalar, lower_right: Scalar, lower_left: Scalar) -> CornerMeasures {
         CornerMeasures {
-            upperLeft,
-            upperRight,
-            lowerRight,
-            lowerLeft,
+            upper_left,
+            upper_right,
+            lower_right,
+            lower_left,
         }
     }
 }

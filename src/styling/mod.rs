@@ -1,9 +1,9 @@
-mod common;
-mod border;
-mod layout;
-mod frame;
-mod font;
-mod text;
+pub mod common;
+pub mod border;
+pub mod layout;
+pub mod frame;
+pub mod font;
+pub mod text;
 
 use self::frame::Frame;
 use self::layout::Layout;
