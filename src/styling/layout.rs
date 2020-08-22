@@ -69,6 +69,12 @@ pub enum SizePolicy {
     Minmax(Scalar, Scalar),
 }
 
+impl SizePolicy {
+    pub fn repeat(count: usize, policy: SizePolicy) -> Vec<SizePolicy> {
+        [policy].repeat(count)
+    }
+}
+
 impl Default for SizePolicy {
     fn default() -> Self {
         SizePolicy::Auto
