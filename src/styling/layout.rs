@@ -64,9 +64,9 @@ pub enum SizePolicy {
     Fr(u32),
     Pc(u32),
     Px(u32),
-    min(Scalar),
-    max(Scalar),
-    minmax(Scalar, Scalar),
+    Min(Scalar),
+    Max(Scalar),
+    Minmax(Scalar, Scalar),
 }
 
 impl Default for SizePolicy {
@@ -77,13 +77,13 @@ impl Default for SizePolicy {
 
 #[derive(Debug, Clone)]
 pub enum Template {
-    Horizontal(Vec<SizePolicy>),
-    Vertical(Vec<SizePolicy>),
+    Columns(Vec<SizePolicy>),
+    Rows(Vec<SizePolicy>),
 }
 
 impl Default for Template {
     fn default() -> Self {
-        Template::Horizontal(vec![SizePolicy::Fr(1)])
+        Template::Columns(vec![SizePolicy::Fr(1)])
     }
 }
 
