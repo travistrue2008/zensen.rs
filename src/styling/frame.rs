@@ -45,9 +45,9 @@ pub struct Frame {
     position: Position,
     margin: SideMeasures<Scalar>,
     padding: SideMeasures<Scalar>,
+    border: Border,
     span_rows: Span,
     span_columns: Span,
-    self_align_horizontal: Align,
-    self_align_vertical: Align,
-    border: Border,
+    self_align_horizontal: Option<Align>,
+    self_align_vertical: Option<Align>,
 }
