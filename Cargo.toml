@@ -10,6 +10,7 @@ license = "MIT"
 speculate = "0.1"
 
 [dependencies]
+macros = { path = "./macros" }
 # gl_toolkit = { git = "https://github.com/travistrue2008/gl-toolkit-rs" }
 
 [workspace]
