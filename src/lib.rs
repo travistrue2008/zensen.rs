@@ -1,10 +1,6 @@
-mod component;
-mod tree;
-mod styling;
+pub mod component;
+pub mod tree;
+pub mod styling;
 
 #[cfg(test)]
 mod test;
-
-fn main() {
-    println!("Hello world.");
-}

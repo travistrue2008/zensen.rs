@@ -1,3 +1,5 @@
+use macros::info;
+
 #[derive(Debug, Clone)]
 pub enum Family {
     Default,
@@ -45,6 +47,7 @@ pub struct Font {
     weight: u16,
 }
 
+#[info]
 #[derive(Debug, Default, Clone)]
 pub struct Modifiers {
     family: Option<Family>,

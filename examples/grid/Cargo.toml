@@ -1,10 +1,15 @@
 [package]
 name = "grid"
-description = "Barebones grid layout example"
+description = "Barebones grid example"
 version = "0.1.0"
 authors = ["travistrue2008 <travis.true08@gmail.com>"]
 edition = "2018"
 license = "MIT"
 
+[[example]]
+name = "grid"
+
+[dev-dependencies]
+speculate = "0.1"
+
 [dependencies]
-zensen = { path = "../../" }
