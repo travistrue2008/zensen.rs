@@ -1,0 +1,10 @@
+[package]
+name = "grid"
+description = "Barebones grid layout example"
+version = "0.1.0"
+authors = ["travistrue2008 <travis.true08@gmail.com>"]
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+zensen = { path = "../../" }

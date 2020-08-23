@@ -6,10 +6,15 @@ authors = ["travistrue2008 <travis.true08@gmail.com>"]
 edition = "2018"
 license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dev-dependencies]
 speculate = "0.1"
 
 [dependencies]
-gl_toolkit = { git = "https://github.com/travistrue2008/gl-toolkit-rs" }
+# gl_toolkit = { git = "https://github.com/travistrue2008/gl-toolkit-rs" }
+
+[workspace]
+members = [
+	".",
+	"examples/grid",
+	"macros",
+]
