@@ -48,6 +48,6 @@ pub struct Frame {
     border: Border,
     span_rows: Span,
     span_columns: Span,
-    self_align_horizontal: Option<Align>,
-    self_align_vertical: Option<Align>,
+    align_self_h: Option<Align>,
+    align_self_v: Option<Align>,
 }

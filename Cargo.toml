@@ -1,6 +1,6 @@
 [package]
 name = "zensen"
-description = "A UI-based framework for Rust"
+description = "A browser-like UI framework for Rust"
 version = "0.1.0"
 authors = ["travistrue2008 <travis.true08@gmail.com>"]
 edition = "2018"
@@ -12,3 +12,4 @@ license = "MIT"
 speculate = "0.1"
 
 [dependencies]
+gl_toolkit = { git = "https://github.com/travistrue2008/gl-toolkit-rs" }

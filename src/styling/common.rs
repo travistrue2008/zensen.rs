@@ -113,7 +113,7 @@ impl<T: Default + Copy> SideMeasures<T> {
         }
     }
 
-    pub fn make_hor_vert(top_bottom: T, left_right: T) -> SideMeasures<T> {
+    pub fn make_vert_horiz(top_bottom: T, left_right: T) -> SideMeasures<T> {
         SideMeasures {
             top: top_bottom,
             right: left_right,
@@ -121,4 +121,10 @@ impl<T: Default + Copy> SideMeasures<T> {
             left: left_right,
         }
     }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __build_modifiers {
+    () => (println!("This comes from a new macro"));
 }

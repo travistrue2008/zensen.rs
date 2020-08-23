@@ -44,3 +44,11 @@ pub struct Font {
     style: Modifier,
     weight: u16,
 }
+
+#[derive(Debug, Default, Clone)]
+pub struct Modifiers {
+    family: Option<Family>,
+    stretch: Option<Stretch>,
+    style: Option<Modifier>,
+    weight: Option<u16>,
+}

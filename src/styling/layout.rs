@@ -66,7 +66,7 @@ pub enum SizePolicy {
     Px(u32),
     Min(Scalar),
     Max(Scalar),
-    Minmax(Scalar, Scalar),
+    Range(Scalar, Scalar),
 }
 
 impl SizePolicy {
@@ -99,6 +99,6 @@ pub struct Layout {
     order: Order,
     gap: Gap,
     template: Template,
-    align_horizontal: Align,
-    align_vertical: Align,
+    align_h: Align,
+    align_v: Align,
 }

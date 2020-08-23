@@ -42,3 +42,20 @@ pub struct Text {
     strikethrough: Option<Color>,
     font: Font,
 }
+
+#[derive(Debug, Clone)]
+pub struct Modifiers {
+    justify: Option<bool>,
+    overflow: Option<Overflow>,
+    wrap_mode: Option<Wrap>,
+    letter_spacing: Option<Scalar>,
+    line_spacing: Option<Scalar>,
+    paragraph_spacing: Option<Scalar>,
+    tab_width: Option<Scalar>,
+    indent_width: Option<Scalar>,
+    whitespace_width: Option<Scalar>,
+    color: Option<Color>,
+    underline: Option<Option<Color>>,
+    strikethrough: Option<Option<Color>>,
+    font: Option<Font>,
+}

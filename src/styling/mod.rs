@@ -61,3 +61,15 @@ pub struct Style {
     layout: Layout,
     text: Text,
 }
+
+#[derive(Debug, Default, Clone)]
+pub struct Modifiers {
+    detect_cursor: Option<bool>,
+    select_mode: Option<SelectMode>,
+    cursor: Option<Cursor>,
+    layer: Option<i8>,
+    opacity: Option<f32>,
+    frame: Option<Frame>,
+    layout: Option<Layout>,
+    text: Option<Text>,
+}
