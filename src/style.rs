@@ -316,7 +316,8 @@ pub struct Style {
     align_self_h: Align,
     align_self_v: Align,
 
-    layout_overflow: LayoutOverflow,
+    layout_overflow_x: LayoutOverflow,
+    layout_overflow_y: LayoutOverflow,
     layout_flow: LayoutFlow,
     layout_order: LayoutOrder,
     layout_gap_h: Scalar,
@@ -383,7 +384,8 @@ pub struct StyleBuilder {
     align_self_h: Option<Align>,
     align_self_v: Option<Align>,
 
-    layout_overflow: Option<LayoutOverflow>,
+    layout_overflow_x: Option<LayoutOverflow>,
+    layout_overflow_y: Option<LayoutOverflow>,
     layout_flow: Option<LayoutFlow>,
     layout_order: Option<LayoutOrder>,
     layout_gap_h: Option<Scalar>,
@@ -709,8 +711,19 @@ impl StyleBuilder {
 
     /* layout */
 
+    pub fn layout_overflow_x(mut self, v: LayoutOverflow) -> StyleBuilder {
+        self.layout_overflow_x = Some(v);
+        self
+    }
+
+    pub fn layout_overflow_y(mut self, v: LayoutOverflow) -> StyleBuilder {
+        self.layout_overflow_y = Some(v);
+        self
+    }
+
     pub fn layout_overflow(mut self, v: LayoutOverflow) -> StyleBuilder {
-        self.layout_overflow = Some(v);
+        self.layout_overflow_x = Some(v);
+        self.layout_overflow_y = Some(v);
         self
     }
 
@@ -872,7 +885,8 @@ impl StyleBuilder {
             align_self_h: self.align_self_h.unwrap_or_default(),
             align_self_v: self.align_self_v.unwrap_or_default(),
 
-            layout_overflow: self.layout_overflow.unwrap_or_default(),
+            layout_overflow_x: self.layout_overflow_x.unwrap_or_default(),
+            layout_overflow_y: self.layout_overflow_y.unwrap_or_default(),
             layout_flow: self.layout_flow.unwrap_or_default(),
             layout_order: self.layout_order.unwrap_or_default(),
             layout_gap_h: self.layout_gap_h.unwrap_or_default(),
@@ -944,7 +958,8 @@ impl Add for StyleBuilder {
             align_self_h:              rhs.align_self_h.or_else(|| self.align_self_h),
             align_self_v:              rhs.align_self_v.or_else(|| self.align_self_v),
 
-            layout_overflow:           rhs.layout_overflow.or_else(|| self.layout_overflow),
+            layout_overflow_x:         rhs.layout_overflow_x.or_else(|| self.layout_overflow_x),
+            layout_overflow_y:         rhs.layout_overflow_y.or_else(|| self.layout_overflow_y),
             layout_flow:               rhs.layout_flow.or_else(|| self.layout_flow),
             layout_order:              rhs.layout_order.or_else(|| self.layout_order),
             layout_gap_h:              rhs.layout_gap_h.or_else(|| self.layout_gap_h),
