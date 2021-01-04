@@ -6,9 +6,13 @@ authors = ["travistrue2008 <travis.true08@gmail.com>"]
 edition = "2018"
 license = "MIT"
 
-# [[example]]
-# name = "grid"
-# path = "examples/grid/src/main.rs"
+[[example]]
+name = "grid"
+path = "examples/grid/src/main.rs"
+
+[[example]]
+name = "textbox"
+path = "examples/textbox/src/main.rs"
 
 [dev-dependencies]
 speculate = "0.1"

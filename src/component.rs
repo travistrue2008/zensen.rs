@@ -1,4 +1,4 @@
-use crate::styling::Style;
+use crate::style::Style;
 // use crate::tree::Tree;
 
 /*
@@ -12,14 +12,15 @@ use crate::styling::Style;
 pub trait Node {}
 
 pub trait Element: Node {
-    fn set_id(&self, id: String);
-    fn get_id(&self) -> String;
+	fn get_id(&self) -> String;
+	fn get_focus(&self) -> String;
+	fn get_hover(&self) -> String;
+	fn get_style(&self) -> Style;
 
-    fn set_hover(&self, flag: bool);
-    fn get_hover(&self) -> String;
-
-    fn set_style(&self, style: String);
-    fn get_style(&self) -> Style;
+	fn set_id(&mut self, id: String);
+	fn set_focus(&mut self, flag: bool);
+	fn set_hover(&mut self, flag: bool);
+	fn set_style(&mut self, style: String);
 }
 
 impl Node for String {}

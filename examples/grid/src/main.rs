@@ -1,6 +1,9 @@
-use zensen::styling;
+use zensen::style::{SizePolicy, StyleBuilder};
 
-pub mod theme;
+fn style_root() -> StyleBuilder {
+    StyleBuilder::default()
+        .layout_rows(SizePolicy::repeat(3, SizePolicy::Fr(1)))
+}
 
 // #[derive(Component)]
 // pub struct Sidebar {

@@ -1,144 +1,110 @@
-use crate::theme::{
-    COLOR_BLACK,
-    COLOR_WHITE,
-    COLOR_ERROR,
-    COLOR_HIGHLIGHT,
-    COLOR_GREY_1,
-    COLOR_GREY_3,
+mod theme;
+
+use crate::theme::*;
+
+use zensen::{
+    component::Element,
+    style::{
+        Scalar,
+        BorderKind,
+        BackgroundFill,
+        Style,
+        StyleBuilder,
+    },
 };
 
-use zensen::style::Style;
-
-fn style_root(c: Textbox) -> Style {
-    Style {
-        border: Border::new(1, theme::COLOR_GREY_1, BorderKind::Solid),
-        background: Background::color(theme::COLOR_WHITE),
-    }
-}
-
-fn style_container(c: Textbox) -> Style {
-    Style {
-        padding: Sides::make_xy(0, c.indent),
-    }
-}
-
-fn style_container_hover(c: Textbox) -> Style {
-    if c.hover && !c.invalid && !c.disabled {
-        Style {
-          border-color: ${CSS_COLOR_BLACK};
-        }
-    } else {
-        Style::new()
-    }
-}
-
-/*
-  Element implements:
-  - pub id(&self)
-  - pub focus(&self)
-  - pub hover(&self)
-  - pub styles(&self)
-
-  - pub set_id(&self, v: String)
-  - pub set_focus(&self, v: Bool)
-  - pub set_hover(&self, v: Bool)
-  - pub set_styles(&self, v: Vec<Styles>)
- */
-
-/*
-  Root implements:
-  - width(&self)
-  - height(&self)
-  - set_width(&self)
-  - get_width(&self)
- */
-
-#[derive(Element)]
-pub struct Textbox {
-    #[prop(pub)]
-    focused: Bool,
-    #[prop(pub)]
-    invalid: Bool,
-    #[prop(pub)]
-    disabled: Bool,
-    #[prop()]
-    indent: u32,
-}
-
-impl Component for Textbox {
-    fn new() -> Textbox {
-        Textbox {
-            focused: false,
-            invalid: false,
-            disabled: false,
-            indent: 12,
-        }
-    }
-
-    fn render(&self) -> Template {
-        template![
-            [View styles:[]]
-                [Slot]
-            [/View]
-        ]
-    }
-}
-
-// class Textbox extends LitElement {
-//   static get styles () {
-//     return [
-//       css`
-//         :host(:hover:not([invalid]):not([disabled])) {
-//           border-color: ${CSS_COLOR_BLACK};
-//         }
-
-//         :host([invalid]:not([disabled])) {
-//           border-color: ${CSS_COLOR_ERROR};
-//         }
-
-//         :host([focused]) {
-//           border-width: 2px;
-//         }
-
-//         :host([focused]:not([invalid]):not([disabled])) {
-//           border-color: ${CSS_COLOR_HIGHLIGHT};
-//         }
-
-//         :host([disabled]) {
-//           border-color: ${CSS_COLOR_GREY_3};
-//         }
-
-//         .container {
-//           display: flex;
-//           width: 100%;
-//           height: 100%;
-//           padding: 0 var(--indent);
-//         }
-
-//         :host([focused]) .container {
-//           padding: 0 calc(var(--indent) - 1px);
-//         }
-//       `,
-//     ]
-//   }
-
-//   constructor () {
-//     super()
-//     this.initState()
-//   }
-
-//   initState () {
-//     this.focused = false
-//     this.invalid = false
-//   }
-
-//   render () {
-//     return html`
-//       <div class="container">
-//         <slot></slot>
-//       </div>
-//     `
-//   }
+// fn style_root(c: Textbox) -> StyleBuilder {
+//     StyleBuilder::default()
+//         .border(Scalar::Px(1), BorderKind::Solid, COLOR_GREY_1)
+//         .border_radius(Scalar::Px(3))
+//         .background_fill(BackgroundFill::Color(COLOR_WHITE))
 // }
 
-// window.customElements.define('neb-textbox', Textbox)
+// fn style_root_focused(c: Textbox) -> StyleBuilder {
+//     if c.focused {
+//         StyleBuilder::default().border_width(Scalar::Px(2))
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// fn style_root_invalid(c: Textbox) -> StyleBuilder {
+//     if c.focused && !c.invalid && !c.disabled {
+//         StyleBuilder::default().border_color(COLOR_HIGHLIGHT)
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// fn style_root_disabled(c: Textbox) -> StyleBuilder {
+//     if c.disabled {
+//         StyleBuilder::default().border_color(COLOR_GREY_3)
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// fn style_container(c: Textbox) -> StyleBuilder {
+//     StyleBuilder::default().spacing_hv(Scalar::Px(0), Scalar::Px(c.indent))
+// }
+
+// fn style_focused(c: Textbox) -> StyleBuilder {
+//     if c.focused {
+//         StyleBuilder::default().spacing_hv(Scalar::Px(c.indent - 1), Scalar::Zero)
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// fn style_container_hover(c: Textbox) -> StyleBuilder {
+//     if c.hover && !c.invalid && !c.disabled {
+//         StyleBuilder::default().border_color(COLOR_BLACK)
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// fn style_container_invalid(c: Textbox) -> StyleBuilder {
+//     if c.invalid && !c.disabled {
+//         StyleBuilder::default().border_color(COLOR_ERROR)
+//     } else {
+//         StyleBuilder::default()
+//     }
+// }
+
+// #[derive(Element)]
+pub struct Textbox {
+    // #[prop(pub)]
+    focused: bool,
+    // #[prop(pub)]
+    invalid: bool,
+    // #[prop(pub)]
+    disabled: bool,
+    // #[prop()]
+    indent: i32,
+}
+
+// impl Component for Textbox {
+//     fn new() -> Textbox {
+//         Textbox {
+//             focused: false,
+//             invalid: false,
+//             disabled: false,
+//             indent: 12,
+//         }
+//     }
+
+//     fn render(&self) -> Template {
+//         template![
+//             <View styles:[container]>
+//                 <Slot/>
+//             </View>
+//         ]
+//     }
+// }
+
+fn main() {
+    println!("rendering textbox...");
+    println!("sizeof Style: {}", std::mem::size_of::<Style>());
+    println!("sizeof StyleBuilder: {}", std::mem::size_of::<StyleBuilder>());
+}

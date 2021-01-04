@@ -1,6 +1,6 @@
 pub mod component;
 pub mod tree;
-pub mod styling;
+pub mod style;
 
 #[cfg(test)]
 mod test;
