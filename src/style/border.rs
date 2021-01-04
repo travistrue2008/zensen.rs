@@ -1,4 +1,4 @@
-use super::common::{Scalar, SideMeasures, Color};
+use super::common::{Scalar, Sides, Color};
 
 #[derive(Debug, Default, Copy, Clone)]
 pub struct CornerMeasures {
@@ -43,54 +43,54 @@ impl Default for Kind {
 
 #[derive(Debug, Default, Copy, Clone)]
 pub struct Border {
-    width: SideMeasures<Scalar>,
-    color: SideMeasures<Color>,
-    kind: SideMeasures<Kind>,
+    kind: Sides<Kind>,
+    color: Sides<Color>,
+    width: Sides<Scalar>,
     radius: CornerMeasures,
 }
 
 impl Border {
     pub fn new(width: Scalar, color: Color, kind: Kind) -> Border {
         Border {
-            width: SideMeasures::new(width),
-            color: SideMeasures::new(color),
-            kind: SideMeasures::new(kind),
+            width: Sides::new(width),
+            color: Sides::new(color),
+            kind: Sides::new(kind),
             radius: CornerMeasures::new(Default::default()),
         }
     }
 
     pub fn top(width: Scalar, color: Color, kind: Kind) -> Border {
         Border {
-            width: SideMeasures::top(width),
-            color: SideMeasures::top(color),
-            kind: SideMeasures::top(kind),
+            width: Sides::top(width),
+            color: Sides::top(color),
+            kind: Sides::top(kind),
             radius: CornerMeasures::new(Default::default()),
         }
     }
 
     pub fn right(width: Scalar, color: Color, kind: Kind) -> Border {
         Border {
-            width: SideMeasures::right(width),
-            color: SideMeasures::right(color),
-            kind: SideMeasures::right(kind),
+            width: Sides::right(width),
+            color: Sides::right(color),
+            kind: Sides::right(kind),
             radius: CornerMeasures::new(Default::default()),
         }
     }
 
     pub fn bottom(width: Scalar, color: Color, kind: Kind) -> Border {
         Border {
-            width: SideMeasures::bottom(width),
-            color: SideMeasures::bottom(color),
-            kind: SideMeasures::bottom(kind),
+            width: Sides::bottom(width),
+            color: Sides::bottom(color),
+            kind: Sides::bottom(kind),
             radius: CornerMeasures::new(Default::default()),
         }
     }
 
     pub fn left(width: Scalar, color: Color, kind: Kind) -> Border {
         Border {
-            width: SideMeasures::left(width),
-            color: SideMeasures::left(color),
-            kind: SideMeasures::left(kind),
+            width: Sides::left(width),
+            color: Sides::left(color),
+            kind: Sides::left(kind),
             radius: CornerMeasures::new(Default::default()),
         }
     }

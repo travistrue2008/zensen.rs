@@ -1,5 +1,7 @@
 use zensen::styling;
 
+pub mod theme;
+
 // #[derive(Component)]
 // pub struct Sidebar {
 //     styles! {
@@ -52,6 +54,13 @@ use zensen::styling;
 //         }
 //     }
 // }
+
+struct Login {
+}
+
+fn test() {
+    {}
+}
 
 fn main() {
     println!("Hello world. We're building a grid.");

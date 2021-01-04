@@ -1,6 +1,19 @@
 use super::common::{Align, Scalar};
 
 #[derive(Debug, Copy, Clone)]
+pub enum Overflow {
+    Visible,
+    Hidden,
+    Scroll,
+}
+
+impl Default for Overflow {
+    fn default() -> Self {
+        Overflow::Visible
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum Flow {
     Row,
     Column,
@@ -95,6 +108,7 @@ impl Default for Template {
 
 #[derive(Debug, Default, Clone)]
 pub struct Layout {
+    overflow: Overflow,
     flow: Flow,
     order: Order,
     gap: Gap,

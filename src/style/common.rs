@@ -54,16 +54,16 @@ impl Default for Color {
 }
 
 #[derive(Debug, Default, Copy, Clone)]
-pub struct SideMeasures<T> {
+pub struct Sides<T> {
     top: T,
     right: T,
     bottom: T,
     left: T,
 }
 
-impl<T: Default + Copy> SideMeasures<T> {
-    pub fn new(size: T) -> SideMeasures<T> {
-        SideMeasures {
+impl<T: Default + Copy> Sides<T> {
+    pub fn new(size: T) -> Sides<T> {
+        Sides {
             top: size,
             right: size,
             bottom: size,
@@ -71,14 +71,23 @@ impl<T: Default + Copy> SideMeasures<T> {
         }
     }
 
-    pub fn make(top: T, right: T, bottom: T, left: T) -> SideMeasures<T> {
-        SideMeasures {
+    pub fn make(top: T, right: T, bottom: T, left: T) -> Sides<T> {
+        Sides {
             top, right, bottom, left,
         }
     }
 
-    pub fn top(size: T) -> SideMeasures<T> {
-        SideMeasures {
+    pub fn make_xy(x: T, y: T) -> Sides<T> {
+        Sides {
+            top: x,
+            right: y,
+            bottom: y,
+            left: x,
+        }
+    }
+
+    pub fn top(size: T) -> Sides<T> {
+        Sides {
             top: size,
             right: Default::default(),
             bottom: Default::default(),
@@ -86,8 +95,8 @@ impl<T: Default + Copy> SideMeasures<T> {
         }
     }
 
-    pub fn right(size: T) -> SideMeasures<T> {
-        SideMeasures {
+    pub fn right(size: T) -> Sides<T> {
+        Sides {
             top: Default::default(),
             right: size,
             bottom: Default::default(),
@@ -95,8 +104,8 @@ impl<T: Default + Copy> SideMeasures<T> {
         }
     }
 
-    pub fn bottom(size: T) -> SideMeasures<T> {
-        SideMeasures {
+    pub fn bottom(size: T) -> Sides<T> {
+        Sides {
             top: Default::default(),
             right: Default::default(),
             bottom: size,
@@ -104,27 +113,12 @@ impl<T: Default + Copy> SideMeasures<T> {
         }
     }
 
-    pub fn left(size: T) -> SideMeasures<T> {
-        SideMeasures {
+    pub fn left(size: T) -> Sides<T> {
+        Sides {
             top: Default::default(),
             right: Default::default(),
             bottom: Default::default(),
             left: size,
         }
     }
-
-    pub fn make_vert_horiz(top_bottom: T, left_right: T) -> SideMeasures<T> {
-        SideMeasures {
-            top: top_bottom,
-            right: left_right,
-            bottom: top_bottom,
-            left: left_right,
-        }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! __build_modifiers {
-    () => (println!("This comes from a new macro"));
 }

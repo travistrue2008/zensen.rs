@@ -1,13 +1,28 @@
-// use crate::styling::Style;
+use crate::styling::Style;
 // use crate::tree::Tree;
 
-// pub trait Node: Sized {
-//     fn set_id(&self, id: String);
-//     fn get_id(&self) -> String;
+/*
+  Elements:
+  - View
+  - Canvas
+  - Image (canvas)
+  - Component
+ */
 
-//     fn set_style(&self, style: String);
-//     fn get_style(&self) -> Style;
-// }
+pub trait Node {}
+
+pub trait Element: Node {
+    fn set_id(&self, id: String);
+    fn get_id(&self) -> String;
+
+    fn set_hover(&self, flag: bool);
+    fn get_hover(&self) -> String;
+
+    fn set_style(&self, style: String);
+    fn get_style(&self) -> Style;
+}
+
+impl Node for String {}
 
 // pub struct View {
 //     id: String,
