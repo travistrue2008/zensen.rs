@@ -138,6 +138,20 @@ impl Default for BackgroundFill {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum Align {
+    Stretch,
+    Start,
+    End,
+    Center,
+}
+
+impl Default for Align {
+    fn default() -> Self {
+        Align::Stretch
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum LayoutOverflow {
     Visible,
     Hidden,
@@ -174,39 +188,6 @@ impl Default for LayoutOrder {
     }
 }
 
-#[derive(Debug, Default, Copy, Clone)]
-pub struct LayoutGap {
-    horizontal: Scalar,
-    vertical: Scalar,
-}
-
-impl LayoutGap {
-    pub fn uniform(amount: Scalar) -> LayoutGap {
-        LayoutGap {
-            horizontal: amount,
-            vertical: amount,
-        }
-    }
-
-    pub fn horizontal(amount: Scalar) -> LayoutGap {
-        LayoutGap {
-            horizontal: amount,
-            vertical: Default::default(),
-        }
-    }
-
-    pub fn vertical(amount: Scalar) -> LayoutGap {
-        LayoutGap {
-            horizontal: Default::default(),
-            vertical: amount,
-        }
-    }
-
-    pub fn both(horizontal: Scalar, vertical: Scalar) -> LayoutGap {
-        LayoutGap { horizontal, vertical }
-    }
-}
-
 #[derive(Debug, Copy, Clone)]
 pub enum SizePolicy {
     Auto,
@@ -229,20 +210,6 @@ impl SizePolicy {
 impl Default for SizePolicy {
     fn default() -> Self {
         SizePolicy::Auto
-    }
-}
-
-#[derive(Debug, Copy, Clone)]
-pub enum LayoutAlign {
-    Stretch,
-    Start,
-    End,
-    Center,
-}
-
-impl Default for LayoutAlign {
-    fn default() -> Self {
-        LayoutAlign::Stretch
     }
 }
 
@@ -346,13 +313,16 @@ pub struct Style {
 
     span_rows: Span,
     span_columns: Span,
+    align_self_h: Align,
+    align_self_v: Align,
 
     layout_overflow: LayoutOverflow,
     layout_flow: LayoutFlow,
     layout_order: LayoutOrder,
-    layout_gap: LayoutGap,
-    layout_align_h: LayoutAlign,
-    layout_align_v: LayoutAlign,
+    layout_gap_h: Scalar,
+    layout_gap_v: Scalar,
+    layout_align_h: Align,
+    layout_align_v: Align,
     layout_rows: Vec<SizePolicy>,
     layout_columns: Vec<SizePolicy>,
 
@@ -410,13 +380,16 @@ pub struct StyleBuilder {
 
     span_rows: Option<Span>,
     span_columns: Option<Span>,
+    align_self_h: Option<Align>,
+    align_self_v: Option<Align>,
 
     layout_overflow: Option<LayoutOverflow>,
     layout_flow: Option<LayoutFlow>,
     layout_order: Option<LayoutOrder>,
-    layout_gap: Option<LayoutGap>,
-    layout_align_h: Option<LayoutAlign>,
-    layout_align_v: Option<LayoutAlign>,
+    layout_gap_h: Option<Scalar>,
+    layout_gap_v: Option<Scalar>,
+    layout_align_h: Option<Align>,
+    layout_align_v: Option<Align>,
     layout_rows: Option<Vec<SizePolicy>>,
     layout_columns: Option<Vec<SizePolicy>>,
 
@@ -724,6 +697,16 @@ impl StyleBuilder {
         self
     }
 
+    pub fn align_self_h(mut self, v: Align) -> StyleBuilder {
+        self.align_self_h = Some(v);
+        self
+    }
+
+    pub fn align_self_v(mut self, v: Align) -> StyleBuilder {
+        self.align_self_v = Some(v);
+        self
+    }
+
     /* layout */
 
     pub fn layout_overflow(mut self, v: LayoutOverflow) -> StyleBuilder {
@@ -741,17 +724,22 @@ impl StyleBuilder {
         self
     }
 
-    pub fn layout_gap(mut self, v: LayoutGap) -> StyleBuilder {
-        self.layout_gap = Some(v);
+    pub fn layout_gap_h(mut self, v: Scalar) -> StyleBuilder {
+        self.layout_gap_h = Some(v);
         self
     }
 
-    pub fn layout_align_h(mut self, v: LayoutAlign) -> StyleBuilder {
+    pub fn layout_gap_v(mut self, v: Scalar) -> StyleBuilder {
+        self.layout_gap_v = Some(v);
+        self
+    }
+
+    pub fn layout_align_h(mut self, v: Align) -> StyleBuilder {
         self.layout_align_h = Some(v);
         self
     }
 
-    pub fn layout_align_v(mut self, v: LayoutAlign) -> StyleBuilder {
+    pub fn layout_align_v(mut self, v: Align) -> StyleBuilder {
         self.layout_align_v = Some(v);
         self
     }
@@ -881,11 +869,14 @@ impl StyleBuilder {
 
             span_rows: self.span_rows.unwrap_or_default(),
             span_columns: self.span_columns.unwrap_or_default(),
+            align_self_h: self.align_self_h.unwrap_or_default(),
+            align_self_v: self.align_self_v.unwrap_or_default(),
 
             layout_overflow: self.layout_overflow.unwrap_or_default(),
             layout_flow: self.layout_flow.unwrap_or_default(),
             layout_order: self.layout_order.unwrap_or_default(),
-            layout_gap: self.layout_gap.unwrap_or_default(),
+            layout_gap_h: self.layout_gap_h.unwrap_or_default(),
+            layout_gap_v: self.layout_gap_v.unwrap_or_default(),
             layout_align_h: self.layout_align_h.unwrap_or_default(),
             layout_align_v: self.layout_align_v.unwrap_or_default(),
             layout_rows: self.layout_rows.clone().unwrap_or_default(),
@@ -950,11 +941,14 @@ impl Add for StyleBuilder {
 
             span_rows:                 rhs.span_rows.or_else(|| self.span_rows.clone()),
             span_columns:              rhs.span_columns.or_else(|| self.span_columns),
+            align_self_h:              rhs.align_self_h.or_else(|| self.align_self_h),
+            align_self_v:              rhs.align_self_v.or_else(|| self.align_self_v),
 
             layout_overflow:           rhs.layout_overflow.or_else(|| self.layout_overflow),
             layout_flow:               rhs.layout_flow.or_else(|| self.layout_flow),
             layout_order:              rhs.layout_order.or_else(|| self.layout_order),
-            layout_gap:                rhs.layout_gap.or_else(|| self.layout_gap),
+            layout_gap_h:              rhs.layout_gap_h.or_else(|| self.layout_gap_h),
+            layout_gap_v:              rhs.layout_gap_v.or_else(|| self.layout_gap_v),
             layout_align_h:            rhs.layout_align_h.or_else(|| self.layout_align_h),
             layout_align_v:            rhs.layout_align_v.or_else(|| self.layout_align_v),
             layout_rows:               rhs.layout_rows.or_else(|| self.layout_rows.clone()),

@@ -1,46 +1,28 @@
-use zensen::style::{SizePolicy, StyleBuilder};
+use zensen::style::{Align, SizePolicy, StyleBuilder};
 
-fn style_root() -> StyleBuilder {
+fn style_root(c: Grid) -> StyleBuilder {
     StyleBuilder::default()
         .layout_rows(SizePolicy::repeat(3, SizePolicy::Fr(1)))
 }
 
+fn style_item_left(c: Grid) -> StyleBuilder {
+    StyleBuilder::default().align_self_h(Align::Start)
+}
+
+fn style_item_right(c: Grid) -> StyleBuilder {
+    StyleBuilder::default().align_self_h(Align::End)
+}
+
+fn style_item_top(c: Grid) -> StyleBuilder {
+    StyleBuilder::default().align_self_v(Align::Start)
+}
+
+fn style_item_bottom(c: Grid) -> StyleBuilder {
+    StyleBuilder::default().align_self_v(Align::End)
+}
+
 // #[derive(Component)]
-// pub struct Sidebar {
-//     styles! {
-//         root {
-//             layout: {
-//                 template: Layout::Template::Rows(
-//                     SizePolicy::repeat(3, ::Fr(1)),
-//                 ),
-//             },
-//         }
-
-//         item_left {
-//             frame: {
-//                 align_self_h: Align::Start,
-//             },
-//         }
-
-//         item_right {
-//             frame: {
-//                 align_self_h: Align::End,
-//             },
-//         }
-
-//         item_top {
-//             frame: {
-//                 align_self_v: Align::Start,
-//             },
-//         }
-
-//         item_bottom {
-//             frame: {
-//                 align_self_v: Align::End,
-//             },
-//         }
-//     }
-
+pub struct Grid {
 //     fn render(&self) -> Markup {
 //         return markup! {
 //             <View styles: [item_top, item_left]></View>
@@ -56,13 +38,6 @@ fn style_root() -> StyleBuilder {
 //             <View styles: [item_bottom, item_right]></View>
 //         }
 //     }
-// }
-
-struct Login {
-}
-
-fn test() {
-    {}
 }
 
 fn main() {
