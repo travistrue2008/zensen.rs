@@ -40,6 +40,19 @@ impl Default for Color {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum Focus {
+    None,
+    Enabled,
+    Index(u8),
+}
+
+impl Default for Focus {
+    fn default() -> Self {
+        Focus::None
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum SelectMode {
     All,
     Text,
@@ -282,6 +295,7 @@ pub struct Style {
     detect_cursor: bool,
     capture_absolute: bool,
     select_mode: SelectMode,
+    focus: Focus,
     cursor: Cursor,
     position: Position,
     layer: u8,
@@ -350,6 +364,7 @@ pub struct StyleBuilder {
     detect_cursor: Option<bool>,
     capture_absolute: Option<bool>,
     select_mode: Option<SelectMode>,
+    focus: Option<Focus>,
     cursor: Option<Cursor>,
     position: Option<Position>,
     layer: Option<u8>,
@@ -426,6 +441,11 @@ impl StyleBuilder {
 
     pub fn select_mode(mut self, v: SelectMode) -> StyleBuilder {
         self.select_mode = Some(v);
+        self
+    }
+
+    pub fn focus(mut self, v: Focus) -> StyleBuilder {
+        self.focus = Some(v);
         self
     }
 
@@ -851,6 +871,7 @@ impl StyleBuilder {
             detect_cursor: self.detect_cursor.unwrap_or_default(),
             capture_absolute: self.detect_cursor.unwrap_or_default(),
             select_mode: self.select_mode.unwrap_or_default(),
+            focus: self.focus.unwrap_or_default(),
             cursor: self.cursor.unwrap_or_default(),
             position: self.position.unwrap_or_default(),
             layer: self.layer.unwrap_or_default(),
@@ -924,6 +945,7 @@ impl Add for StyleBuilder {
             detect_cursor:             rhs.detect_cursor.or_else(|| self.detect_cursor),
             capture_absolute:          rhs.capture_absolute.or_else(|| self.capture_absolute),
             select_mode:               rhs.select_mode.or_else(|| self.select_mode),
+            focus:                     rhs.focus.or_else(|| self.focus),
             cursor:                    rhs.cursor.or_else(|| self.cursor),
             position:                  rhs.position.or_else(|| self.position),
             layer:                     rhs.layer.or_else(|| self.layer),
