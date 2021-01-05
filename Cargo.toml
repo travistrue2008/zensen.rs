@@ -15,7 +15,7 @@ name = "textbox"
 path = "examples/textbox/src/main.rs"
 
 [dev-dependencies]
-speculate = "0.1"
+rspec = "1.0.0-beta.4"
 
 [dependencies]
 macros = { path = "./macros" }

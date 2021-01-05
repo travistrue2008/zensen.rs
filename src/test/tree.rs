@@ -1,205 +1,234 @@
-use crate::tree::*;
+#[cfg(test)]
+ mod tests {
+    use rspec;
 
-use speculate::speculate;
+    use crate::tree::*;
 
-speculate! {
-    describe "tree" {
-        const ID_INVALID: u32 = 1000;
+    const ID_INVALID: u32 = 1000;
 
-        before {
-            let mut tree = Tree::new();
+    #[test]
+    pub fn suite() {
+        #[derive(Debug)]
+        struct Environment {
+            id1: u32,
+            id2: u32,
+            id3: u32,
+            id4: u32,
+            id5: u32,
+            insert_result: Result<u32>,
+            remove_result: Result<Vec<u32>>,
+            child_node: Node,
+            parent_node: Node,
+            instance: Tree,
         }
 
-        context "when adding a node" {
-            before {
-                let id1 = tree.add();
-            }
-
-            it "returns the correct ID" {    
-                assert_eq!(id1, 1);
-            }
-
-            it "is associated with the correct index" {    
-                assert_eq!(tree.get_index(id1), Ok(0));
-            }
-
-            it "adds the node to the arena" {
-                assert_eq!(tree.arena(), &vec![
-                    Node::new(1, None, Vec::new()),
-                ]);
-            }
-
-            context "when removing an invalid node" {
-                before {
-                    let sub_id = tree.remove(ID_INVALID);
-                }
-    
-                it "returns an error" {                
-                    assert_eq!(sub_id, Err(Error::InvalidNodeId));
-                }
-            }
-
-            context "when removing a node" {
-                before {
-                    let result = tree.remove(id1);
-                }
-
-                it "returns the IDs of the removed nodes" {
-                    assert_eq!(result, Ok(vec![id1]));
-                }
-
-                it "removes it from the arena" {
-                    assert_eq!(tree.arena(), &vec![]);
-                }
-            }
-
-            context "when adding a second node" {
-                before {
-                    let id2 = tree.add();
-                }
-    
-                it "returns the correct ID" {
-                    assert_eq!(id2, 2);
-                }
-
-                it "adds the node to the arena" {
-                    assert_eq!(tree.arena(), &vec![
-                        Node::new(id1, None, Vec::new()),
-                        Node::new(id2, None, Vec::new()),
-                    ]);
-                }
-
-                context "when inserting a sub-node into an invalid node" {
-                    before {
-                        let sub_id = tree.insert(ID_INVALID);
-                    }
-        
-                    it "returns an error" {                
-                        assert_eq!(sub_id, Err(Error::InvalidNodeId));
-                    }
-                }
-
-                context "when adding a sub-node" {
-                    before {
-                        let id3 = tree.insert(id2).unwrap();
-                        let child_node = tree.get_node(id3).unwrap();
-                        let parent_node = tree.get_node(id2).unwrap();
-                    }
-    
-                    it "returns the correct ID" {
-                        assert_eq!(id3, 3);
-                    }
-    
-                    it "has a parent ID" {
-                        assert_eq!(child_node.parent_id(), Some(id2));
-                    }
-    
-                    it "adds the node as a child to its parent" {
-                        assert_eq!(parent_node.child_ids(), &vec![id3]);
-                    }
-    
-                    it "adds the node to the arena" {
-                        assert_eq!(tree.arena(), &vec![
-                            Node::new(id1, None, Vec::new()),
-                            Node::new(id2, None, vec![id3]),
-                            Node::new(id3, Some(id2), Vec::new()),
-                        ]);
-                    }
-
-                    context "when adding a second sub-node" {
-                        before {
-                            let id4 = tree.insert(id2).unwrap();
-                            let child_node = tree.get_node(id4).unwrap();
-                            let parent_node = tree.get_node(id2).unwrap();
-                        }
-        
-                        it "returns the correct ID" {
-                            assert_eq!(id4, 4);
-                        }
-        
-                        it "has a parent ID" {
-                            assert_eq!(child_node.parent_id(), Some(id2));
-                        }
-        
-                        it "adds the node as a child to its parent" {
-                            assert_eq!(parent_node.child_ids(), &vec![id3, id4]);
-                        }
-        
-                        it "adds the node to the arena" {
-                            assert_eq!(tree.arena(), &vec![
-                                Node::new(id1, None, Vec::new()),
-                                Node::new(id2, None, vec![id3, id4]),
-                                Node::new(id3, Some(id2), Vec::new()),
-                                Node::new(id4, Some(id2), Vec::new()),
-                            ]);
-                        }
-
-                        context "when removing a leaf-most node" {
-                            before {
-                                let result = tree.remove(id3);
-                            }
-
-                            it "returns the IDs of the removed nodes" {
-                                assert_eq!(result, Ok(vec![id3]));
-                            }
-            
-                            it "removes it from the arena" {
-                                assert_eq!(tree.arena(), &vec![
-                                    Node::new(id1, None, Vec::new()),
-                                    Node::new(id2, None, vec![id4]),
-                                    Node::new(id4, Some(id2), Vec::new()),
-                                ]);
-                            }
-                        }
-
-                        context "when removing a node that has children" {
-                            before {
-                                let result = tree.remove(id2);
-                            }
-
-                            it "returns the IDs of the target node and all children" {
-                                assert_eq!(result, Ok(vec![id2, id3, id4]));
-                            }
-            
-                            it "removes it and its children from the arena" {
-                                assert_eq!(tree.arena(), &vec![
-                                    Node::new(id1, None, Vec::new()),
-                                ]);
-                            }
-                        }
-
-                        context "when adding another top-level node" {
-                            before {
-                                let id5 = tree.add();
-                            }
-
-                            it "adds the node to the arena" {
-                                assert_eq!(tree.arena(), &vec![
-                                    Node::new(id1, None, Vec::new()),
-                                    Node::new(id2, None, vec![id3, id4]),
-                                    Node::new(id3, Some(id2), Vec::new()),
-                                    Node::new(id4, Some(id2), Vec::new()),
-                                    Node::new(id5, None, Vec::new()),
-                                ]);
-                            }
-
-                            it "is associated with the correct index" {
-                                assert_eq!(tree.get_index(id5), Ok(4));
-                            }
-
-                            context "when removing a sub-node" {
-                                before {
-                                    tree.remove(id2).unwrap();
-                                }
-
-                                it "is associated with the correct index" {
-                                    assert_eq!(tree.get_index(id5), Ok(1));
-                                }
-                            }
-                        }
-                    }
+        impl Clone for Environment {
+            fn clone(&self) -> Self {
+                Environment {
+                    id1: self.id1,
+                    id2: self.id2,
+                    id3: self.id3,
+                    id4: self.id4,
+                    id5: self.id5,
+                    insert_result: self.insert_result.clone(),
+                    remove_result: self.remove_result.clone(),
+                    child_node: self.child_node.clone(),
+                    parent_node: self.child_node.clone(),
+                    instance: self.instance.clone(),
                 }
             }
         }
+
+        impl Default for Environment {
+            fn default() -> Self {
+                Environment {
+                    id1: 0,
+                    id2: 0,
+                    id3: 0,
+                    id4: 0,
+                    id5: 0,
+                    insert_result: Ok(0),
+                    remove_result: Ok(vec![]),
+                    child_node: Node::default(),
+                    parent_node: Node::default(),
+                    instance: Tree::default(),
+                }
+            }
+        }
+
+        rspec::run(&rspec::describe("tree", Environment::default(), |ctx| {
+            ctx.before_each(|env| {
+                env.instance = Tree::new();
+            });
+
+            ctx.when("adding a node", |ctx| {
+                ctx.before_each(|env| {
+                    env.id1 = env.instance.add();
+                });
+
+                ctx.it("returns the correct ID", |env|
+                    assert_eq!(env.id1, 1));
+
+                ctx.it("is associated with the correct index", |env|
+                    assert_eq!(env.instance.get_index(env.id1), Ok(0)));
+
+                ctx.it("adds the node to the arena", |env|
+                    assert_eq!(env.instance.arena(), &vec![
+                        Node::new(1, None, Vec::new()),
+                    ]));
+
+                ctx.when("when removing an invalid node", |ctx| {
+                    ctx.before_each(|env| {
+                        env.remove_result = env.instance.remove(ID_INVALID);
+                    });
+
+                    ctx.it("returns an error", |env|
+                        assert_eq!(env.remove_result, Err(Error::InvalidNodeId)));
+                });
+
+                ctx.when ("when removing a node", |ctx| {
+                    ctx.before_each( |env| {
+                        env.remove_result = env.instance.remove(env.id1);
+                    });
+    
+                    ctx.it("returns the IDs of the removed nodes", |env|
+                        assert_eq!(env.remove_result, Ok(vec![env.id1])));
+    
+                    ctx.it("removes it from the arena", |env|
+                        assert_eq!(env.instance.arena(), &vec![]));
+                });
+
+                ctx.when("adding a second node", |ctx| {
+                    ctx.before_each(|env| {
+                        env.id2 = env.instance.add();
+                    });
+        
+                    ctx.it("returns the correct ID", |env|
+                        assert_eq!(env.id2, 2));
+    
+                    ctx.it("adds the node to the arena", |env|
+                        assert_eq!(env.instance.arena(), &vec![
+                            Node::new(env.id1, None, Vec::new()),
+                            Node::new(env.id2, None, Vec::new()),
+                        ]));
+    
+                    ctx.when("inserting a sub-node into an invalid node", |ctx| {
+                        ctx.before_each(|env| {
+                            env.insert_result = env.instance.insert(ID_INVALID);
+                        });
+            
+                        ctx.it("returns an error", |env|
+                            assert_eq!(env.insert_result, Err(Error::InvalidNodeId)));
+                    });
+    
+                    ctx.when("adding a sub-node", |ctx| {
+                        ctx.before_each(|env| {
+                            env.id3 = env.instance.insert(env.id2).unwrap();
+                            env.child_node = env.instance.get_node(env.id3).unwrap();
+                            env.parent_node = env.instance.get_node(env.id2).unwrap();
+                        });
+        
+                        ctx.it("returns the correct ID", |env|
+                            assert_eq!(env.id3, 3));
+        
+                        ctx.it("has a parent ID", |env|
+                            assert_eq!(env.child_node.parent_id(), Some(env.id2)));
+        
+                        ctx.it("adds the node as a child to its parent", |env|
+                            assert_eq!(env.parent_node.child_ids(), &vec![env.id3]));
+        
+                        ctx.it ("adds the node to the arena", |env|
+                            assert_eq!(env.instance.arena(), &vec![
+                                Node::new(env.id1, None, Vec::new()),
+                                Node::new(env.id2, None, vec![env.id3]),
+                                Node::new(env.id3, Some(env.id2), Vec::new()),
+                            ]));
+    
+                        ctx.when("adding a second sub-node", |ctx| {
+                            ctx.before_each(|env| {
+                                env.id4 = env.instance.insert(env.id2).unwrap();
+                                env.child_node = env.instance.get_node(env.id4).unwrap();
+                                env.parent_node = env.instance.get_node(env.id2).unwrap();
+                            });
+            
+                            ctx.it("returns the correct ID", |env|
+                                assert_eq!(env.id4, 4));
+            
+                            ctx.it("has a parent ID", |env|
+                                assert_eq!(env.child_node.parent_id(), Some(env.id2)));
+            
+                            ctx.it("adds the node as a child to its parent", |env|
+                                assert_eq!(env.parent_node.child_ids(), &vec![env.id3, env.id4]));
+            
+                            ctx.it("adds the node to the arena", |env|
+                                assert_eq!(env.instance.arena(), &vec![
+                                    Node::new(env.id1, None, Vec::new()),
+                                    Node::new(env.id2, None, vec![env.id3, env.id4]),
+                                    Node::new(env.id3, Some(env.id2), Vec::new()),
+                                    Node::new(env.id4, Some(env.id2), Vec::new()),
+                                ]));
+    
+                            ctx.when("removing a leaf-most node", |ctx| {
+                                ctx.before_each(|env| {
+                                    env.remove_result = env.instance.remove(env.id3);
+                                });
+    
+                                ctx.it("returns the IDs of the removed nodes", |env|
+                                    assert_eq!(env.remove_result, Ok(vec![env.id3])));
+                
+                                ctx.it("removes it from the arena", |env|
+                                    assert_eq!(env.instance.arena(), &vec![
+                                        Node::new(env.id1, None, Vec::new()),
+                                        Node::new(env.id2, None, vec![env.id4]),
+                                        Node::new(env.id4, Some(env.id2), Vec::new()),
+                                    ]));
+                            });
+    
+                            ctx.when("removing a node that has children", |ctx| {
+                                ctx.before_each(|env| {
+                                    env.remove_result = env.instance.remove(env.id2);
+                                });
+    
+                                ctx.it("returns the IDs of the target node and all children", |env|
+                                    assert_eq!(env.remove_result, Ok(vec![env.id2, env.id3, env.id4])));
+                
+                                ctx.it("removes it and its children from the arena", |env|
+                                    assert_eq!(env.instance.arena(), &vec![
+                                        Node::new(env.id1, None, Vec::new()),
+                                    ]));
+                            });
+    
+                            ctx.when("adding another top-level node", |ctx| {
+                                ctx.before_each(|env| {
+                                    env.id5 = env.instance.add();
+                                });
+    
+                                ctx.it("adds the node to the arena", |env|
+                                    assert_eq!(env.instance.arena(), &vec![
+                                        Node::new(env.id1, None, Vec::new()),
+                                        Node::new(env.id2, None, vec![env.id3, env.id4]),
+                                        Node::new(env.id3, Some(env.id2), Vec::new()),
+                                        Node::new(env.id4, Some(env.id2), Vec::new()),
+                                        Node::new(env.id5, None, Vec::new()),
+                                    ]));
+    
+                                ctx.it("is associated with the correct index", |env|
+                                    assert_eq!(env.instance.get_index(env.id5), Ok(4)));
+    
+                                ctx.when("when removing a sub-node", |ctx| {
+                                    ctx.before_each(|env| {
+                                        env.instance.remove(env.id2).unwrap();
+                                    });
+    
+                                    ctx.it("is associated with the correct index", |env|
+                                        assert_eq!(env.instance.get_index(env.id5), Ok(1)));
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }));
     }
-}
+ }
+ 

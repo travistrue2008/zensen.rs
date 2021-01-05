@@ -2,12 +2,12 @@ use std::result;
 
 pub type Result<T> = result::Result<T, Error>;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Error {
     InvalidNodeId,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
 pub struct Node {
     id: u32,
     parent_id: Option<u32>,
@@ -32,7 +32,7 @@ impl Node {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Tree {
     next_id: u32,
     arena: Vec<Node>,
